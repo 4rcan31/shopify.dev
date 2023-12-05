@@ -1,0 +1,28 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "efficient-portfolio-app"
+client_id = "8a0baa25eacd332f0262c19bda45e8d1"
+application_url = "https://asthma-hygiene-biographies-teachers.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://asthma-hygiene-biographies-teachers.trycloudflare.com/auth/callback",
+  "https://asthma-hygiene-biographies-teachers.trycloudflare.com/auth/shopify/callback",
+  "https://asthma-hygiene-biographies-teachers.trycloudflare.com/api/auth/callback",
+  "https://asthma-hygiene-biographies-teachers.trycloudflare.com/.shopify/graphiql/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "quickstart-6d2039a5.myshopify.com"
