@@ -2,7 +2,7 @@
 
 name = "efficient-portfolio-app"
 client_id = "8a0baa25eacd332f0262c19bda45e8d1"
-application_url = "https://asthma-hygiene-biographies-teachers.trycloudflare.com"
+application_url = "https://dream-pasta-grand-bringing.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://asthma-hygiene-biographies-teachers.trycloudflare.com/auth/callback",
-  "https://asthma-hygiene-biographies-teachers.trycloudflare.com/auth/shopify/callback",
-  "https://asthma-hygiene-biographies-teachers.trycloudflare.com/api/auth/callback",
-  "https://asthma-hygiene-biographies-teachers.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://dream-pasta-grand-bringing.trycloudflare.com/auth/callback",
+  "https://dream-pasta-grand-bringing.trycloudflare.com/auth/shopify/callback",
+  "https://dream-pasta-grand-bringing.trycloudflare.com/api/auth/callback",
+  "https://dream-pasta-grand-bringing.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]

@@ -23,7 +23,7 @@ export default function App() {
           Home
         </Link>
         <Link to="/app/qr">QR App</Link>
-        <Link to="/app/additional">Additional page</Link>
+        <Link to="/app/emails">Emails App</Link>
       </ui-nav-menu>
       <Outlet />
     </AppProvider>
