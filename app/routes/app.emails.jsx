@@ -7,7 +7,7 @@ import {
     Text,
     BlockStack,
     TextField,
-    Butto
+    Button
 } from "@shopify/polaris";
 import { useState } from "react";
 
@@ -92,7 +92,6 @@ export default function Index() {
 
                             <TextField
                                 id="subject"
-                                multiline={4}
                                 helpText="Escribe el Asunto del mensaje"
                                 label="Asunto"
                                 labelHidden
