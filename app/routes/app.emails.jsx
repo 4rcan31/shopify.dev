@@ -1,5 +1,4 @@
 import { useLoaderData, Link, useSubmit } from "@remix-run/react";
-import { authenticate } from "../shopify.server";
 import {
     Card,
     Layout,
