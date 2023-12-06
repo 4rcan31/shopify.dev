@@ -49,8 +49,6 @@ https://{{TIENDA}}/admin/oauth/authorize?client_id={{ID_APP}}&scope={{PERMISOS}}
 
 Una vez conectada, podrás visualizar tu aplicación funcionando dentro del panel de administración de Shopify de tu tienda. Esta experiencia te permite comprender el entorno de desarrollo y cómo se integra Remix con la API de Shopify.
 
-Por supuesto, aquí está una versión más comprensible, amigable y formal sobre Remix y su integración con la API:
-
 ## Integración de Remix con la API en Shopify
 
 Remix es un framework JavaScript que opera en el navegador y está íntimamente ligado a React. Al crear una aplicación con la CLI de Shopify, se establece un proyecto Remix, localizado en la carpeta `/app`. En la subcarpeta `/routes` se encuentran definidas las distintas rutas o vistas de la aplicación, escritas en formato `jsx`.
