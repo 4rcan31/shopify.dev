@@ -2,74 +2,218 @@
 
 
 
+## Funcionamiento de Shopify
+
+Shopify es mucho más que una plataforma para crear tiendas en línea. Simplifica el proceso de administrar una tienda, desde la gestión de productos hasta la atención a los clientes. Lo interesante es que no se limita únicamente a sus propias ideas de automatización. En cambio, ofrece una oportunidad única a la comunidad para que desarrollen aplicaciones personalizadas que se integren con las tiendas existentes en Shopify.
+
+### Simplificación de Tareas Cotidianas
+
+Imagina una tienda en línea: clientes que buscan y compran productos, un equipo de personas que gestionan pedidos y productos... Shopify automatiza gran parte de este proceso, liberando tiempo y recursos. Pero lo que hace aún más impresionante a Shopify es su apertura a la innovación a través de aplicaciones externas.
+
+En lugar de limitarse a crear todas las funciones por sí mismos, Shopify brinda acceso a su plataforma para que desarrolladores externos creen aplicaciones personalizadas. Estas aplicaciones pueden integrarse directamente con las tiendas de Shopify, ofreciendo soluciones únicas y ampliando las funcionalidades de manera significativa.
+
+![Diagrama de Funcionamiento de Shopify](doc/diagrama_shopify_workit.jpg)
+
+Este enfoque colaborativo permite un ecosistema diverso, en el que las tiendas pueden personalizar sus experiencias y operaciones con aplicaciones especializadas según sus necesidades.
 
 
 
-# Shopify App Template - Remix
 
-This is a template for building a [Shopify app](https://shopify.dev/docs/apps/getting-started) using the [Remix](https://remix.run) framework.
 
-Rather than cloning this repo, you can use your preferred package manager and the Shopify CLI with [these steps](https://shopify.dev/docs/apps/getting-started/create).
+## Integración de Aplicaciones en Shopify
 
-Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-remix) for more details on the Remix app package.
+Shopify ofrece la oportunidad de mejorar las funcionalidades de las tiendas mediante la integración de aplicaciones de terceros. Estas aplicaciones tienen dos formas principales de trabajar:
 
-## Quick start
+1. **Integración en el Panel de Administración de la Tienda:**
+   - Esta opción requiere la inserción de código HTML dentro de la interfaz de Shopify. La plataforma proporciona una librería llamada [Polaris](https://polaris.shopify.com/), que ofrece componentes JSX para facilitar su implementación.
 
-### Prerequisites
+2. **Funcionamiento en un Servidor Independiente:**
+   - Este enfoque permite la ejecución en un servidor separado, lo que resulta útil para características personalizadas. Además, puede permitir la gestión de sesiones de usuarios propios de la aplicación, independientes de Shopify.
 
-1. You must [download and install Node.js](https://nodejs.org/en/download/) if you don't already have it.
-2. You must [create a Shopify partner account](https://partners.shopify.com/signup) if you don’t have one.
-3. You must create a store for testing if you don't have one, either a [development store](https://help.shopify.com/en/partners/dashboard/development-stores#create-a-development-store) or a [Shopify Plus sandbox store](https://help.shopify.com/en/partners/dashboard/managing-stores/plus-sandbox-store).
+### Funcionamiento de las Aplicaciones
 
-### Setup
+En la documentación de Shopify, hay algunos espacios vacios, pero sirve para entender varios procesos de desarrollo de aplicaciones. Por ejemplo, para poner en marcha tu primera aplicación, la documentación emplea la CLI (Interfaz de Línea de Comandos) de Shopify, una herramienta que ejecuta comandos útiles.
 
-If you used the CLI to create the template, you can skip this section.
+Se guía a los desarrolladores a instalar una aplicación utilizando [Remix](https://www.escuelafrontend.com/remix-js), un framework JavaScript que se ejecuta en el navegador y no en el servidor. Una vez instalado, se utiliza el comando `npm run dev` para poner en funcionamiento la aplicación. Luego, se proporciona un enlace que se debe copiar y pegar en el navegador; este enlace instala la aplicación en la tienda. Es probable que aún no tengas una tienda, por lo que la documentación sugiere crear una tienda de desarrollo para probar la aplicación, aunque creeria que esta tienda se crea automáticamente.
 
-Using yarn:
+La estructura de este enlace es la siguiente:
+
+```
+https://{{TIENDA}}/admin/oauth/authorize?client_id={{ID_APP}}&scope={{PERMISOS}}&redirect_uri={{REDIRECT_URI}}
+```
+
+- `TIENDA`: Es la tienda a la que se conectará la aplicación.
+- `ID_APP`: Representa la clave pública de la aplicación.
+- `PERMISOS`: Define los permisos solicitados por la aplicación para su funcionamiento.
+- `REDIRECT_URI`: La URL a la que se redirige después de completar el proceso de instalación.
+
+Una vez conectada, podrás visualizar tu aplicación funcionando dentro del panel de administración de Shopify de tu tienda. Esta experiencia te permite comprender el entorno de desarrollo y cómo se integra Remix con la API de Shopify.
+
+Por supuesto, aquí está una versión más comprensible, amigable y formal sobre Remix y su integración con la API:
+
+## Integración de Remix con la API en Shopify
+
+Remix es un framework JavaScript que opera en el navegador y está íntimamente ligado a React. Al crear una aplicación con la CLI de Shopify, se establece un proyecto Remix, localizado en la carpeta `/app`. En la subcarpeta `/routes` se encuentran definidas las distintas rutas o vistas de la aplicación, escritas en formato `jsx`.
+
+### Estructura de Rutas y Funcionalidades en Remix
+
+Las rutas de la aplicación se relacionan directamente con los archivos `.jsx` dentro de la carpeta `/routes`. Por ejemplo, si nombras un archivo dentro de `/routes` como `app.qr.jsx`, se generará una ruta denominada `app/qr`. Al visitar esta ruta, se renderizarán los componentes definidos en el archivo `app.qr.jsx`.
+
+Además, puedes pasar parámetros a través de las URL. Si nombras un archivo como `app.qr.$id.jsx`, `$id` se convierte en un parámetro esperado en la URL. Pero, ¿cómo accedes a estos parámetros y solicitudes? Aquí es donde Remix entra en juego con sus dos funciones principales: `loader` y `action`.
+
+#### Función Loader
+
+La función `loader` se ejecuta justo cuando se visita una URL, antes de renderizar la vista. En esta función, puedes analizar y obtener los datos de la solicitud (`request`) y los parámetros de la URL (`params`).
+
+```jsx
+export async function loader({ request, params }){
+    // Acceso a la data de la solicitud y parámetros de la URL
+}
+```
+
+Esta función está diseñada para cargar datos antes de la renderización de la vista. Puedes utilizarla para realizar llamadas a una API externa y renderizar esos datos en la vista.
+
+#### Función Action
+
+La función `action` se activa al enviar un formulario o realizar una acción en la misma página. En esta función, puedes manejar los eventos generados por el formulario o la acción, obtener datos del formulario y realizar acciones basadas en la solicitud.
+
+```jsx
+import { useSubmit } from "@remix-run/react";
+import { Button } from "@shopify/polaris";
+export async function action({ request }) {
+    // Procesamiento de eventos de formulario y solicitud
+    return null;
+}
+
+export default function Index() {
+   const summit = useSubmit();
+
+   function sendData(){
+      // El primer parámetro de la función summit es la data que se enviará
+      // Al enviarse, se ejecutará la función action
+      summit({}, { method: 'POST' });
+   }
+
+   return(
+      <Button variant="primary" onClick={sendData}>Enviar</Button>
+   );
+}
+```
+
+Estas dos funciones son esenciales en Remix para cargar datos y manejar acciones en la aplicación. Además, puedes utilizar otras funciones de React, como `useState` o `useEffect`, de manera habitual para complementar la lógica de tu aplicación.
+
+
+
+Por supuesto, aquí tienes una versión más comprensible, amigable y formal sobre cómo usar la API de Shopify desde Remix:
+
+## Uso de la API de Shopify en Remix
+
+El acceso a la API de Shopify desde Remix puede ser algo raro, ya que, al buscar en la documentación oficial en la sección de [API de administración REST](https://shopify.dev/docs/api/admin-rest) y hacer clic en la sección relacionada con `remix`, te redirige a una página de error 404. Entonces, ¿cómo se puede utilizar?
+
+Para entender este proceso, seguí la guía para crear tu primera aplicación con Remix que está en la documentación de Shopify. Esta aplicación se centra en la creación de códigos QR para cada producto. La aplicación debe autenticar la petición que se realiza y para ello utiliza la función `loader`, ya que es la primera que se ejecuta.
+
+```javascript
+export async function loader({ request }) {
+  const { admin } = await authenticate.admin(request);
+}
+```
+
+Una vez que la solicitud se autentica correctamente, el objeto `admin` contiene información valiosa que podemos usar para realizar llamadas a la API. Hasta el momento, el objeto `admin` tiene la siguiente estructura:
+
+![Objeto Admin](doc/admin_response_data.png)
+
+Como se muestra en el objeto `admin.rest.resources`, allí se encuentran todos los objetos de la API a los que se puede acceder. Por ejemplo, en el archivo `app/routes/app._index.jsx` tenemos un ejemplo en el que accedemos al propietario de la tienda:
+
+```javascript
+export async function loader({ request }) {
+  const { admin, session } = await authenticate.admin(request);
+  const shop = await admin.rest.resources.Shop.all({
+    session: session,
+  });
+
+  if (shop && shop.data && shop.data.length > 0 && shop.data[0].shop_owner) {
+    const ownerShop = shop.data[0].shop_owner;
+    return ownerShop;
+  } else {
+    return "No pudimos saber tu nombre :(";
+  }
+}
+```
+
+Como se puede observar, estas funciones requieren no solo el objeto `admin`, sino también una variable `session` para saber a qué tienda se le hará la llamada a la API. La variable `session` también se puede obtener del método `admin` del objeto `authenticate`, justo como se muestra a continuación:
+
+```javascript
+const { admin, session } = await authenticate.admin(request);
+```
+
+Esta integración entre Remix y la API de Shopify permite un acceso directo a la API de Shopify desde tu aplicación, facilitando así la manipulación y el uso de los datos almacenados en la plataforma de Shopify dentro de tu aplicación Remix.
+
+# Doc oficial de Shopify App Template - Remix traducida al espanol
+
+
+## Plantilla para construir una aplicación de Shopify usando el framework Remix
+
+En lugar de clonar este repositorio, puedes utilizar tu gestor de paquetes preferido y el CLI de Shopify con [estos pasos](https://shopify.dev/docs/apps/getting-started/create).
+
+Visita la [documentación de `shopify.dev`](https://shopify.dev/docs/api/shopify-app-remix) para más detalles sobre el paquete de aplicación Remix.
+
+## Inicio rápido
+
+### Requisitos previos
+
+1. Debes [descargar e instalar Node.js](https://nodejs.org/es/download/) si aún no lo tienes.
+2. Debes [crear una cuenta de socio en Shopify](https://partners.shopify.com/signup) si no tienes una.
+3. Debes crear una tienda para pruebas si no tienes una, ya sea una [tienda de desarrollo](https://help.shopify.com/es/partners/dashboard/development-stores#create-a-development-store) o una [tienda sandbox de Shopify Plus](https://help.shopify.com/es/partners/dashboard/managing-stores/plus-sandbox-store).
+
+### Configuración
+
+Si utilizaste el CLI para crear la plantilla, puedes omitir esta sección.
+
+Usando yarn:
 
 ```shell
 yarn install
 ```
 
-Using npm:
+Usando npm:
 
 ```shell
 npm install
 ```
 
-Using pnpm:
+Usando pnpm:
 
 ```shell
 pnpm install
 ```
 
-### Local Development
+### Desarrollo local
 
-Using yarn:
+Usando yarn:
 
 ```shell
 yarn dev
 ```
 
-Using npm:
+Usando npm:
 
 ```shell
 npm run dev
 ```
 
-Using pnpm:
+Usando pnpm:
 
 ```shell
 pnpm run dev
 ```
 
-Press P to open the URL to your app. Once you click install, you can start development.
+Presiona P para abrir la URL de tu aplicación. Una vez que hagas clic en instalar, puedes comenzar con el desarrollo.
 
-Local development is powered by [the Shopify CLI](https://shopify.dev/docs/apps/tools/cli). It logs into your partners account, connects to an app, provides environment variables, updates remote config, creates a tunnel and provides commands to generate extensions.
+El desarrollo local es impulsado por [el CLI de Shopify](https://shopify.dev/docs/apps/tools/cli). Inicia sesión en tu cuenta de socio, se conecta a una aplicación, proporciona variables de entorno, actualiza la configuración remota, crea un túnel y proporciona comandos para generar extensiones.
 
-### Authenticating and querying data
+### Autenticación y consulta de datos
 
-To authenticate and query data you can use the `shopify` const that is exported from `/app/shopify.server.js`:
+Para autenticar y consultar datos, puedes utilizar la constante `shopify` exportada desde `/app/shopify.server.js`:
 
 ```js
 export async function loader({ request }) {
@@ -95,170 +239,147 @@ export async function loader({ request }) {
 }
 ```
 
-This template come preconfigured with examples of:
+Esta plantilla viene preconfigurada con ejemplos de:
 
-1. Setting up your Shopify app in [/app/shopify.server.js](https://github.com/Shopify/shopify-app-template-remix/blob/main/app/shopify.server.js)
-2. Querying data using Graphql. Please see: [/app/routes/app.\_index.jsx](https://github.com/Shopify/shopify-app-template-remix/blob/main/app/routes/app._index.jsx).
-3. Responding to mandatory webhooks in [/app/routes/webhooks.jsx](https://github.com/Shopify/shopify-app-template-remix/blob/main/app/routes/webhooks.jsx)
+1. Configurar tu aplicación de Shopify en [/app/shopify.server.js](https://github.com/Shopify/shopify-app-template-remix/blob/main/app/shopify.server.js)
+2. Consultar datos utilizando GraphQL. Consulta: [/app/routes/app.\_index.jsx](https://github.com/Shopify/shopify-app-template-remix/blob/main/app/routes/app._index.jsx).
+3. Responder a webhooks obligatorios en [/app/routes/webhooks.jsx](https://github.com/Shopify/shopify-app-template-remix/blob/main/app/routes/webhooks.jsx)
 
-Please read the [documentation for @shopify/shopify-app-remix](https://www.npmjs.com/package/@shopify/shopify-app-remix#authenticating-admin-requests) to understand what other API's are available.
+Lee la [documentación de @shopify/shopify-app-remix](https://www.npmjs.com/package/@shopify/shopify-app-remix#authenticating-admin-requests) para entender qué otras API están disponibles.
 
-## Deployment
+## Implementación
 
-### Application Storage
+### Almacenamiento de la aplicación
 
-This template uses [Prisma](https://www.prisma.io/) to store session data, by default using an [SQLite](https://www.sqlite.org/index.html) database.
-The database is defined as a Prisma schema in `prisma/schema.prisma`.
+Esta plantilla utiliza [Prisma](https://www.prisma.io/) para almacenar datos de sesión, utilizando una base de datos [SQLite](https://www.sqlite.org/index.html) por defecto.
+La base de datos SQLite funciona en producción si tu aplicación se ejecuta como una única instancia.
+La base de datos que mejor se adapte depende de los datos que tu aplicación necesite y de cómo se consulten.
+Puedes ejecutar tu base de datos elegida en un servidor tú mismo o alojarla con una empresa de software como servicio (SaaS).
+Aquí tienes una lista de proveedores de bases de datos que ofrecen un nivel gratuito para comenzar:
 
-This use of SQLite works in production if your app runs as a single instance.
-The database that works best for you depends on the data your app needs and how it is queried.
-You can run your database of choice on a server yourself or host it with a SaaS company.
-Here’s a short list of databases providers that provide a free tier to get started:
+| Base de Datos | Tipo             | Proveedores                                                                                                                                                                                                                      |
+| ------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MySQL         | SQL              | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-mysql), [Planet Scale](https://planetscale.com/), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/mysql) |
+| PostgreSQL    | SQL              | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-postgresql), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/postgres)                                |
+| Redis         | Key-value        | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-redis), [Amazon MemoryDB](https://aws.amazon.com/memorydb/)                                                                                                     |
+| MongoDB       | NoSQL / Document | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-mongodb), [MongoDB Atlas](https://www.mongodb.com/atlas/database)                                                                                              |
 
-| Database   | Type             | Hosters                                                                                                                                                                                                                               |
-| ---------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| MySQL      | SQL              | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-mysql), [Planet Scale](https://planetscale.com/), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/mysql) |
-| PostgreSQL | SQL              | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-postgresql), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/postgres)                                   |
-| Redis      | Key-value        | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-redis), [Amazon MemoryDB](https://aws.amazon.com/memorydb/)                                                                                                        |
-| MongoDB    | NoSQL / Document | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-mongodb), [MongoDB Atlas](https://www.mongodb.com/atlas/database)                                                                                                  |
+Para utilizar uno de estos, puedes utilizar un [proveedor de origen de datos diferente](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#datasource) en tu archivo `schema.prisma`, o un [paquete adaptador de almacenamiento de sesión diferente](https://github.com/Shopify/shopify-api-js/tree/main/docs/guides/session-storage.md).
 
-To use one of these, you can use a different [datasource provider](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#datasource) in your `schema.prisma` file, or a different [SessionStorage adapter package](https://github.com/Shopify/shopify-api-js/tree/main/docs/guides/session-storage.md).
+### Construcción
 
-### Build
+Remix se encarga de la construcción de la aplicación por ti, ejecutando el siguiente comando con el gestor de paquetes que elijas:
 
-Remix handles building the app for you, by running the command below with the package manager of your choice:
-
-Using yarn:
+Usando yarn:
 
 ```shell
 yarn build
 ```
 
-Using npm:
+Usando npm:
 
 ```shell
 npm run build
 ```
 
-Using pnpm:
+Usando pnpm:
 
 ```shell
 pnpm run build
 ```
 
-## Hosting
+## Alojamiento
 
-When you're ready to set up your app in production, you can follow [our deployment documentation](https://shopify.dev/docs/apps/deployment/web) to host your app on a cloud provider like [Heroku](https://www.heroku.com/) or [Fly.io](https://fly.io/).
+Cuando estés listo para configurar tu aplicación en producción, puedes seguir [nuestra documentación de despliegue](https://shopify.dev/docs/apps/deployment/web) para alojar tu aplicación en un proveedor de servicios en la nube como [Heroku](https://www.heroku.com/) o [Fly.io](https://fly.io/).
 
-When you reach the step for [setting up environment variables](https://shopify.dev/docs/apps/deployment/web#set-env-vars), you also need to set the variable `NODE_ENV=production`.
+Cuando llegues al paso para [configurar variables de entorno](https://shopify.dev/docs/apps/deployment/web#set-env-vars), también necesitas establecer la variable `NODE_ENV=production`.
 
-## Gotchas / Troubleshooting
+## Problemas comunes / Solución de problemas
 
-### Database tables don't exist
+### Las tablas de la base de datos no existen
 
-If you get this error:
+Si recibes este error:
 
 ```
-The table `main.Session` does not exist in the current database.
+La tabla `main.Session` no existe en la base de datos actual.
 ```
 
-You need to create the database for Prisma. Run the `setup` script in `package.json` using your preferred package manager.
+Debes crear la base de datos para Prisma. Ejecuta el script `setup` en `package.json` utilizando tu gestor de paquetes preferido.
 
-### Navigating/redirecting breaks an embedded app
+### La navegación/redirección rom
 
-Embedded Shopify apps must maintain the user session, which can be tricky inside an iFrame. To avoid issues:
+pe una aplicación incrustada
 
-1. Use `Link` from `@remix-run/react` or `@shopify/polaris`. Do not use `<a>`.
-2. Use the `redirect` helper returned from `authenticate.admin`. Do not use `redirect` from `@remix-run/node`
-3. Use `useSubmit` or `<Form/>` from `@remix-run/react`. Do not use a lowercase `<form/>`.
+Las aplicaciones de Shopify incrustadas deben mantener la sesión de usuario, lo cual puede ser complicado dentro de un iframe. Para evitar problemas:
 
-This only applies if you app is embedded, which it will be by default.
+1. Utiliza `Link` de `@remix-run/react` o `@shopify/polaris`. No utilices `<a>`.
+2. Utiliza el ayudante `redirect` devuelto desde `authenticate.admin`. No utilices `redirect` de `@remix-run/node`.
+3. Utiliza `useSubmit` o `<Form/>` de `@remix-run/react`. No utilices un `<form/>` en minúsculas.
 
-### Non Embedded
+Esto solo se aplica si tu aplicación está incrustada, lo cual es el caso por defecto.
 
-Shopify apps are best when they are embedded into the Shopify Admin. This template is configured that way. If you have a reason to not embed your please make 2 changes:
+### No incrustada
 
-1. Change the `isEmbeddedApp` prop to false for the `AppProvider` in `/app/routes/app.jsx`
-2. Remove any use of App Bridge APIs (`window.shopify`) from your code
-3. Update the config for shopifyApp in `app/shopify.server.js`. Pass `isEmbeddedApp: false`
+Las aplicaciones de Shopify son mejores cuando están incrustadas en el panel de administración de Shopify. Esta plantilla está configurada de esa manera. Si tienes una razón para no incrustarla, realiza 2 cambios:
 
-### OAuth goes into a loop when I change my app's scopes
+1. Cambia la propiedad `isEmbeddedApp` a false para `AppProvider` en `/app/routes/app.jsx`
+2. Elimina cualquier uso de las API de App Bridge (`window.shopify`) de tu código
+3. Actualiza la configuración para `shopifyApp` en `app/shopify.server.js`. Pasa `isEmbeddedApp: false`.
 
-If you change your app's scopes and authentication goes into a loop and fails with a message from Shopify that it tried too many times, you might have forgotten to update your scopes with Shopify.
-To do that, you can run the `config push` CLI command.
+### OAuth entra en un bucle cuando cambio los alcances de mi aplicación
 
-Using yarn:
+Si cambias los alcances de tu aplicación y la autenticación entra en un bucle y falla con un mensaje de Shopify que indica que se intentó muchas veces, es posible que hayas olvidado actualizar tus alcances con Shopify.
+Para hacerlo, puedes ejecutar el comando CLI `config push`.
+
+Usando yarn:
 
 ```shell
 yarn shopify app config push
 ```
 
-Using npm:
+Usando npm:
 
 ```shell
 npm run shopify app config push
 ```
 
-Using pnpm:
+Usando pnpm:
 
 ```shell
 pnpm run shopify app config push
 ```
 
-### My webhook subscriptions aren't being updated
+### Mis suscripciones a webhooks no se están actualizando
 
-This template registers webhooks after OAuth completes, usng the `afterAuth` hook when calling `shopifyApp`.
-The package calls that hook in 2 scenarios:
-- After installing the app
-- When an access token expires
+Esta plantilla registra webhooks después de que OAuth se complete, utilizando el gancho `afterAuth` al llamar a `shopifyApp`.
+El paquete llama a ese gancho en 2 escenarios:
+- Después de instalar la aplicación
+- Cuando un token de acceso caduca
 
-During normal development, the app won't need to re-authenticate most of the time, so the subscriptions aren't updated.
+Durante el desarrollo normal, la aplicación no necesitará reautenticarse la mayoría de las veces, por lo que las suscripciones no se actualizan.
 
-To force your app to update the subscriptions, you can uninstall and reinstall it in your development store.
-That will force the OAuth process and call the `afterAuth` hook.
+Para forzar a tu aplicación a actualizar las suscripciones, puedes desinstalarla y reinstalarla en tu tienda de desarrollo.
+Eso forzará el proceso de OAuth y llamará al gancho `afterAuth`.
 
-### Incorrect GraphQL Hints
+### Pistas incorrectas de GraphQL
 
-By default the [graphql.vscode-graphql](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql) extension for VS Code will assume that GraphQL queries or mutations are for the [Shopify Admin API](https://shopify.dev/docs/api/admin). This is a sensible default, but it may not be true if:
+Por defecto, la extensión [graphql.vscode-graphql](https://marketplace.visualstudio.com/items?itemName=GraphQL.vscode-graphql) de VS Code asumirá que las consultas o mutaciones de GraphQL son para la [API de administración de Shopify](https://shopify.dev/docs/api/admin). Esto es un valor predeterminado sensato, pero puede no ser cierto si:
 
-1. You use another Shopify API such as the storefront API.
-2. You use a third party GraphQL API.
+1. Utilizas otra API de Shopify como la API del frontend.
+2. Utilizas una API de GraphQL de terceros.
 
-in this situation, please update the [.graphqlrc.js](https://github.com/Shopify/shopify-app-template-remix/blob/main/.graphqlrc.js) config.
+En esta situación, actualiza la configuración [.graphqlrc.js](https://github.com/Shopify/shopify-app-template-remix/blob/main/.graphqlrc.js).
 
-## Benefits
+## Beneficios
 
-Shopify apps are built on a variety of Shopify tools to create a great merchant experience.
+Las aplicaciones de Shopify se construyen con una variedad de herramientas de Shopify para crear una excelente experiencia para el comerciante.
 
-<!-- TODO: Uncomment this after we've updated the docs -->
-<!-- The [create an app](https://shopify.dev/docs/apps/getting-started/create) tutorial in our developer documentation will guide you through creating a Shopify app using this template. -->
+La plantilla de la aplicación Remix viene con las siguientes funcionalidades listas para usar:
 
-The Remix app template comes with the following out-of-the-box functionality:
+- [OAuth](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#authenticating-admin-requests): Instalación de la aplicación y concesión de permisos.
+- [GraphQL Admin API](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#using-the-shopify-admin-graphql-api): Consultar o modificar datos administrativos de Shopify.
+- [REST Admin API](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#using-the-shopify-admin-rest-api): Clases de recursos para interactuar con la API.
+- [Webhooks](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#authenticating-webhook-requests): Devoluciones de llamada enviadas por Shopify cuando ocurren ciertos eventos.
+- [AppBridge](https://shopify.dev/docs/api/app-bridge): Esta plantilla utiliza la próxima generación de la biblioteca Shopify App Bridge que funciona en armonía con las versiones anteriores.
+- [Polaris](https://polaris.shopify.com/): Sistema de diseño que permite a las aplicaciones crear experiencias similares a Shopify.
 
-- [OAuth](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#authenticating-admin-requests): Installing the app and granting permissions
-- [GraphQL Admin API](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#using-the-shopify-admin-graphql-api): Querying or mutating Shopify admin data
-- [REST Admin API](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#using-the-shopify-admin-rest-api): Resource classes to interact with the API
-- [Webhooks](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#authenticating-webhook-requests): Callbacks sent by Shopify when certain events occur
-- [AppBridge](https://shopify.dev/docs/api/app-bridge): This template uses the next generation of the Shopify App Bridge library which works in unison with previous versions.
-- [Polaris](https://polaris.shopify.com/): Design system that enables apps to create Shopify-like experiences
-
-## Tech Stack
-
-This template uses [Remix](https://remix.run). The following Shopify tools are also included to ease app development:
-
-- [Shopify App Remix](https://shopify.dev/docs/api/shopify-app-remix) provides authentication and methods for interacting with Shopify APIs.
-- [Shopify App Bridge](https://shopify.dev/docs/apps/tools/app-bridge) allows your app to seamlessly integrate your app within Shopify's Admin.
-- [Polaris React](https://polaris.shopify.com/) is a powerful design system and component library that helps developers build high quality, consistent experiences for Shopify merchants.
-- [Webhooks](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#authenticating-webhook-requests): Callbacks sent by Shopify when certain events occur
-- [Polaris](https://polaris.shopify.com/): Design system that enables apps to create Shopify-like experiences
-
-## Resources
-
-- [Remix Docs](https://remix.run/docs/en/v1)
-- [Shopify App Remix](https://shopify.dev/docs/api/shopify-app-remix)
-- [Introduction to Shopify apps](https://shopify.dev/docs/apps/getting-started)
-- [App authentication](https://shopify.dev/docs/apps/auth)
-- [Shopify CLI](https://shopify.dev/docs/apps/tools/cli)
-- [App extensions](https://shopify.dev/docs/apps/app-extensions/list)
-- [Shopify Functions](https://shopify.dev/docs/api/functions)
-- [Getting started with internationalizing your app](https://shopify.dev/docs/apps/best-practices/internationalization/getting-started)
