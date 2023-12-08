@@ -1,0 +1,29 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "testapp"
+client_id = "0b2d1f1421c65923c854ede5fd3ad087"
+application_url = "https://orlando-file-draw-hc.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products, read_customers, write_customers"
+use_legacy_install_flow = true
+
+[auth]
+redirect_urls = [
+  "https://orlando-file-draw-hc.trycloudflare.com/auth/callback",
+  "https://orlando-file-draw-hc.trycloudflare.com/auth/shopify/callback",
+  "https://orlando-file-draw-hc.trycloudflare.com/api/auth/callback",
+  "https://orlando-file-draw-hc.trycloudflare.com/.shopify/graphiql/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "quickstart-6d2039a5.myshopify.com"
