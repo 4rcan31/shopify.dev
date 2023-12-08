@@ -2,7 +2,7 @@
 
 name = "efficient-portfolio-app"
 client_id = "8a0baa25eacd332f0262c19bda45e8d1"
-application_url = "https://dream-pasta-grand-bringing.trycloudflare.com"
+application_url = "https://bedford-vista-textbook-satisfactory.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://dream-pasta-grand-bringing.trycloudflare.com/auth/callback",
-  "https://dream-pasta-grand-bringing.trycloudflare.com/auth/shopify/callback",
-  "https://dream-pasta-grand-bringing.trycloudflare.com/api/auth/callback",
-  "https://dream-pasta-grand-bringing.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://bedford-vista-textbook-satisfactory.trycloudflare.com/auth/callback",
+  "https://bedford-vista-textbook-satisfactory.trycloudflare.com/auth/shopify/callback",
+  "https://bedford-vista-textbook-satisfactory.trycloudflare.com/api/auth/callback",
+  "https://bedford-vista-textbook-satisfactory.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]
