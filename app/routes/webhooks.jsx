@@ -29,9 +29,10 @@ export const action = async ({ request }) => {
       console.log("updated desde la ruta");
       console.log(payload);
     case "CUSTOMERS_CREATE":
-      console.log('yapa, si era eso xd');
+      console.log('Ejecutanto customers create...');
       const client = new AcountClient(payload); //aca envio el correo
-      client.sendWelcomeEmailClient();
+      //tengo que esperar 
+      await client.sendWelcomeEmailClient();
     default:
       throw new Response("Unhandled webhook topic", { status: 404 });
   }

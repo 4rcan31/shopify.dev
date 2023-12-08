@@ -1,6 +1,7 @@
-import {  ServiceEmail } from "../../utils/emails/service";
+import { sendDataServer } from "../../utils/connect/server";
+import { ServiceEmail } from "../../utils/emails/service";
 
-export class AcountClient{
+export class AcountClient {
 
     payloadClient;
     email;
@@ -9,7 +10,8 @@ export class AcountClient{
     last_name;
     phone;
 
-    constructor(payloadClient){
+    constructor(payloadClient) {
+        console.log("Ejecutanto construtor account client...");
         this.payloadClient = payloadClient;
         this.email = payloadClient.email;
         this.id = payloadClient.id;
@@ -19,34 +21,36 @@ export class AcountClient{
     }
 
 
-    async sendWelcomeEmailClient(){
-        console.log("Entradooooo");
+    async sendWelcomeEmailClient() {
+        console.log("Ejecutanto send Welcome Email Client...");
         const path = require('path');
         const fs = require('fs');
         const handlebars = require('handlebars');
-  /*       const puppeteer = require('puppeteer'); */
-
-
-        const source = path.join(__dirname, '../utils/emails/templates/welcome.hbs', 'utf8');
+        //esto esta asi, por que en realidad, la aplicacion se esta ejecutando en
+        // build/index.js
+        const filePath = path.resolve(__dirname, '../app/utils/emails/templates/welcome.hbs');
+        const source = fs.readFileSync(filePath, 'utf8');
         const template = handlebars.compile(source);
-        const data = {
+        //se inyecta la data al template de hbs
+        console.log("Renderizando templates welcome client...");
+        const html = template({
             first_name: this.first_name,
             last_name: this.last_name,
-          }; 
-        const html = template(data); 
-
-       /*  const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.setContent(html);
-        await page.pdf({ path: 'welcome_email.pdf' });
-    
-        await browser.close(); */
+        });
         const serviceEmail = new ServiceEmail(
             this.email,
-            html, //aca quiero que pongas el pdf, como lo haces?
+            html,
             "Bienvenido a nuestra tienda!"
         );
         serviceEmail.send();
+        const sendData =  new sendDataServer(
+            this.payloadClient,
+            "http://localhost:8081",
+            "POST"
+        );
+        sendData.execute();
+        console.log("Esta es la data devuelta: ");
+        console.log(sendData.getResponse());
         console.log("Me ejecute papi");
     }
 

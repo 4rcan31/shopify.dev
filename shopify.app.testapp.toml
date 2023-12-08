@@ -2,7 +2,7 @@
 
 name = "testapp"
 client_id = "0b2d1f1421c65923c854ede5fd3ad087"
-application_url = "https://orlando-file-draw-hc.trycloudflare.com"
+application_url = "https://frederick-estimate-forecasts-scoring.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -12,10 +12,10 @@ use_legacy_install_flow = true
 
 [auth]
 redirect_urls = [
-  "https://orlando-file-draw-hc.trycloudflare.com/auth/callback",
-  "https://orlando-file-draw-hc.trycloudflare.com/auth/shopify/callback",
-  "https://orlando-file-draw-hc.trycloudflare.com/api/auth/callback",
-  "https://orlando-file-draw-hc.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://frederick-estimate-forecasts-scoring.trycloudflare.com/auth/callback",
+  "https://frederick-estimate-forecasts-scoring.trycloudflare.com/auth/shopify/callback",
+  "https://frederick-estimate-forecasts-scoring.trycloudflare.com/api/auth/callback",
+  "https://frederick-estimate-forecasts-scoring.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]
