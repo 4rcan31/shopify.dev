@@ -4,7 +4,6 @@ export class Email{
 
     to;
     body;
-    title;
     driver;
 
     from;
@@ -15,6 +14,7 @@ export class Email{
     transporter;
 
     constructor(to, body, subject, driver){
+        console.log("Ejecutanto class para envios email...");
         this.to = to;
         this.body = body;
         this.subject = subject;
@@ -41,6 +41,7 @@ export class Email{
     }
 
     async send(){
+        console.log("Enviando email to: " + this.to + "...");
         if('sendMail' in this.transporter){
             return await this.transporter.sendMail({
                 from: this.from,
