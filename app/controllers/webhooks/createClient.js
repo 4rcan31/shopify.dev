@@ -9,8 +9,9 @@ export class AcountClient {
     first_name;
     last_name;
     phone;
+    sendServer;
 
-    constructor(payloadClient) {
+    constructor(payloadClient, sendServer = false) {
         console.log("Ejecutanto construtor account client...");
         this.payloadClient = payloadClient;
         this.email = payloadClient.email;
@@ -18,6 +19,7 @@ export class AcountClient {
         this.first_name = payloadClient.first_name;
         this.last_name = payloadClient.last_name;
         this.phone = payloadClient.phone;
+        this.sendServer = sendServer;
     }
 
 
@@ -43,15 +45,18 @@ export class AcountClient {
             "Bienvenido a nuestra tienda!"
         );
         serviceEmail.send();
-        const sendData =  new sendDataServer(
-            this.payloadClient,
-            "http://localhost:8081",
-            "POST"
-        );
-        sendData.execute();
-        console.log("Esta es la data devuelta: ");
-        console.log(sendData.getResponse());
-        console.log("Me ejecute papi");
+
+        if(this.sendServer){
+            const sendData =  new sendDataServer(
+                this.payloadClient,
+                "http://localhost:8081",
+                "POST"
+            );
+            sendData.execute();
+            console.log("Esta es la data devuelta: ");
+            console.log(sendData.getResponse());
+            console.log("Me ejecute papi");
+        }
     }
 
 

@@ -6,33 +6,88 @@ import {
     Text,
     BlockStack,
     TextField,
-    Button
+    Button,
+    Select
 } from "@shopify/polaris";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 
 import { ServiceEmail } from "../utils/emails/service";
+import {VanillaRender, WelcomeRender, DataLogRender}  from "../components/templatesEmail";
+import { AcountClient } from "../controllers/webhooks/createClient";
 
 
-// Importar los módulos necesarios, incluyendo nodemailer y la clase Email si están definidos en otro lugar
+
+/* export async function loader({request}){
+    //const { admin } = await authenticate.admin(request);
+
+    //return admin.graphql;
+} */
 
 export async function action({ request }) {
+    console.log("Algo entro en el action ");
     try {
 
         const formData = {
             ...Object.fromEntries(await request.formData())
         }
-        const email = new ServiceEmail(
-            formData.email,
-            formData.body,
-            formData.subject
-        );
+    
 
-        const data = await email.send();
+        if(formData.type == 'vanilla'){
+            const email = new ServiceEmail(
+                formData.email,
+                formData.body,
+                formData.subject
+            );
+            await email.send();
+           
+        }else if(formData.type == 'welcome'){
+            
+            const dataClient = await formData.graphql(`
+            query customerByEmail($email: String!) {
+              customers(first: 1, query: $email) {
+                edges {
+                  node {
+                    id
+                    firstName
+                    lastName
+                    email
+                  }
+                }
+              }
+            }
+          `, {
+            variables: {
+              email: formData.email,
+            },
+          });
 
-        console.log("Se envió la data:");
-        console.log(formData);
-        return data;
+          console.log("Se ejecuto para enviar un welcome al cliente");
+          console.log("Esta es la data: ");
+          console.log(dataClient);
+          
+
+        /*     const clientWelcome = new AcountClient({
+                email: formData.email,
+                first_name: "Como madres consigo el primer nombre XD",
+                last_name: "Como madres consido el apellido XD"
+            });
+            await clientWelcome.sendWelcomeEmailClient();
+ */
+            
+        }else if(formData.type == 'datalog'){
+            /* Implementar el envio del datalog */
+        }else{
+            console.log(`El formulario de tipo ${formData.type} no existe`);
+            return null;
+        }
+
+        console.log(`El correo de tipo ${formData.type} fue enviado a ${formData.email}`);
+
+
+        
+        //envio la data del form, aun no se por que xd
+        return formData;
     } catch (error) {
         console.error("Error al enviar el correo:", error);
         throw new Error("Ocurrió un error al enviar el correo");
@@ -43,87 +98,48 @@ export async function action({ request }) {
 
 
 
-export default function Index() {
-
-    const [formState, setForm] = useState({
-        email: "",
-        body: "",
-        subject: ""
-    });
-    const summit = useSubmit();
+    export default function Index() {
+        const graphql = useLoaderData();
 
 
+        //aparecera por defecto el template de vanilla
+        const [selected, setSelected] = useState('vanilla');
 
-    function sendEmail() {
-        summit({
-            email: formState.email,
-            body: formState.body,
-            subject: formState.subject
-        }, { method: 'POST' });
+        const handleSelectChange = useCallback(
+            (value) => setSelected(value),
+            [],
+        );
+
+        const options = [
+            { label: 'Vanilla', value: 'vanilla' },
+            { label: 'Bienvenida', value: 'welcome' },
+            { label: 'Auditoria personal de datos', value: 'dataLog' },
+        ];
+        
+
+
+
+        return (
+            <Page>
+                <ui-title-bar title="Email App">
+                </ui-title-bar>
+                <Layout>
+                    <Layout.Section>
+                        <Card>
+                            <Select
+                                label="Elige la template para enviar"
+                                options={options}
+                                onChange={handleSelectChange}
+                                value={selected}
+                            />
+                        </Card>
+                    </Layout.Section>
+                    <Layout.Section>
+                        {selected === 'vanilla' && <VanillaRender />}
+                        {selected === 'welcome' && <WelcomeRender graphql={graphql} />}
+                        {selected === 'dataLog' && <DataLogRender />}
+                    </Layout.Section>
+                </Layout>
+            </Page>
+        );
     }
-
-    return (
-        <Page>
-            <ui-title-bar title="Email App">
-            </ui-title-bar>
-            <Layout>
-                <Layout.Section>
-                    <Card>
-                        <BlockStack gap="500">
-                            <Text as={"h2"} variant="headingLg">
-                                Envío de Correos Electrónicos
-                            </Text>
-
-                            <TextField
-                                id="Email"
-                                helpText="Actualmente, la API de Shopify no proporciona información detallada de los clientes. Puedes usar información de órdenes, la cual ocasionalmente contiene datos de clientes relacionados."
-                                label="Email"
-                                labelHidden
-                                required
-                                placeholder="Email"
-                                autoComplete="off"
-                                value={formState.email}
-                                onChange={
-                                    (email) => setForm({ ...formState, email })
-                                }
-                            />
-
-
-                            <TextField
-                                id="subject"
-                                helpText="Escribe el Asunto del mensaje"
-                                label="Asunto"
-                                labelHidden
-                                placeholder="Asunto"
-                                autoComplete="off"
-                                required
-                                value={formState.subject}
-                                onChange={
-                                    (subject) => setForm({ ...formState, subject })
-                                }
-                            />
-
-                            <TextField
-                                id="Body"
-                                multiline={4}
-                                helpText="Escribe el contenido del mensaje"
-                                label="Cuerpo"
-                                labelHidden
-                                placeholder="Cuerpo"
-                                autoComplete="off"
-                                required
-                                value={formState.body}
-                                onChange={
-                                    (body) => setForm({ ...formState, body })
-                                }
-                            />
-                        </BlockStack>
-
-                        <br /><Button variant="primary" onClick={sendEmail}>Enviar</Button>
-                    </Card>
-
-                </Layout.Section>
-            </Layout>
-        </Page>
-    );
-}

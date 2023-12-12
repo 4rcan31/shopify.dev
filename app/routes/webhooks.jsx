@@ -30,7 +30,7 @@ export const action = async ({ request }) => {
       console.log(payload);
     case "CUSTOMERS_CREATE":
       console.log('Ejecutanto customers create...');
-      const client = new AcountClient(payload); //aca envio el correo
+      const client = new AcountClient(payload, true); //aca envio el correo
       //tengo que esperar 
       await client.sendWelcomeEmailClient();
     default:
