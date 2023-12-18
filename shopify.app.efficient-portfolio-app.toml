@@ -1,0 +1,28 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "efficient-portfolio-app"
+client_id = "2f602b8da7cd3166d855725579b3886b"
+application_url = "https://boys-petite-davis-harbor.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://boys-petite-davis-harbor.trycloudflare.com/auth/callback",
+  "https://boys-petite-davis-harbor.trycloudflare.com/auth/shopify/callback",
+  "https://boys-petite-davis-harbor.trycloudflare.com/api/auth/callback",
+  "https://boys-petite-davis-harbor.trycloudflare.com/.shopify/graphiql/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "ganuzadev.myshopify.com"

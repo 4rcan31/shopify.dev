@@ -35,3 +35,11 @@ model QRCode {
   createdAt        DateTime @default(now())
 }
 
+model email_tamplate {
+  id               Int      @id @default(autoincrement())
+  template_name    String
+  header           String
+  body             String
+  footer           String
+  createdAt        DateTime @default(now())
+}
